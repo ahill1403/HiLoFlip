@@ -25,6 +25,16 @@ struct SettingsView: View {
                     ))
                 }
             }
+
+            Section("Sound") {
+                Toggle("Enable Sound Effects", isOn: $vm.soundsEnabled)
+            }
+
+            Section {
+                Button("Reset Game State", role: .destructive) {
+                    vm.resetGameState()
+                }
+            }
         }
         .navigationTitle("Settings")
     }

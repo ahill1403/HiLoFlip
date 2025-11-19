@@ -33,8 +33,8 @@ struct HiLoGame {
 
     struct Player: Identifiable, Hashable, Codable {
         let id: UUID
-        fileprivate(set) var name: String
-        fileprivate(set) var hand: [Card]
+        private(set) var name: String
+        private(set) var hand: [Card]
         private(set) var score: Int
 
         init(name: String, id: UUID = UUID()) {
@@ -109,6 +109,11 @@ struct HiLoGame {
         for i in players[pIndex].hand.indices {
             players[pIndex].hand[i].isFaceUp = isFaceUp
         }
+    }
+
+    mutating func awardPoints(to playerID: UUID, points: Int) {
+        guard let pIndex = players.firstIndex(where: { $0.id == playerID }) else { return }
+        players[pIndex].score += points
     }
 }
 
