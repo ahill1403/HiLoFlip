@@ -32,7 +32,7 @@ struct GameView: View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            VStack(spacing: 14) {
+            VStack(spacing: 16) {
                 if let top = vm.players.first {
                     grid(for: top, isTop: true)
                 }
