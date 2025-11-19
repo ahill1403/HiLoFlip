@@ -106,7 +106,13 @@ struct GameView: View {
                 animation: { _ in .spring(response: 0.5, dampingFraction: 0.7) }
             )
 
-            DeckView(count: vm.deckCount)
+            Button {
+                vm.drawCardForCurrentPlayer()
+            } label: {
+                DeckView(count: vm.deckCount)
+                    .opacity(vm.deckCount == 0 ? 0.45 : 1.0)
+            }
+            .buttonStyle(.plain)
 
             DiscardPileView(top: vm.discardTop, pop: discardPop, namespace: cardNS)
                 .contentShape(Rectangle())
@@ -265,10 +271,19 @@ struct DeckView: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.black)
                 .frame(width: 97, height: 135)
-            Text("Deck\n\(count)")
-                .multilineTextAlignment(.center)
-                .font(.headline)
-                .foregroundStyle(.white)
+            VStack(spacing: 4) {
+                Text("Deck")
+                    .font(.headline)
+                Text("\(count)")
+                    .font(.title3.weight(.semibold))
+                Text("Draw")
+                    .font(.caption.bold())
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(.white.opacity(0.16), in: Capsule())
+            }
+            .multilineTextAlignment(.center)
+            .foregroundStyle(.white)
         }
         .accessibilityLabel("Deck with \(count) cards remaining")
     }
