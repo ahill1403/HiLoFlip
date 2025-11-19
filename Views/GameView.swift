@@ -26,25 +26,28 @@ struct GameView: View {
     @State private var tokenSpinTick = 0
     @State private var showSpotlight = false
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
+    private let columns = [GridItem(.adaptive(minimum: 86, maximum: 120), spacing: 10)]
 
     var body: some View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            VStack(spacing: 14) {
-                if let top = vm.players.first {
-                    grid(for: top, isTop: true)
-                }
+            ScrollView {
+                VStack(spacing: 18) {
+                    if let top = vm.players.first {
+                        grid(for: top, isTop: true)
+                    }
 
-                centerArea
+                    centerArea
 
-                if vm.players.count > 1 {
-                    grid(for: vm.players[1], isTop: false)
+                    if vm.players.count > 1 {
+                        grid(for: vm.players[1], isTop: false)
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .safeAreaPadding(.horizontal, 12)
+                .safeAreaPadding(.vertical, 14)
             }
-            .padding(.horizontal, 6)
-            .padding(.vertical, 8)
 
             if showSpotlight {
                 Rectangle()
@@ -101,7 +104,10 @@ struct GameView: View {
                     guard let card = items.first else { return false }
                     let before = vm.discardTop?.id
                     let ok = vm.tryPlayFromDrop(card, owner: vm.currentPlayer)
-                    if ok, before != vm.discardTop?.id { discardPop.toggle() }
+                    if ok {
+                        vm.play(card: card, from: vm.currentPlayer)
+                        if before != vm.discardTop?.id { discardPop.toggle() }
+                    }
                     return ok
                 } isTargeted: { hovering in
                     isHoveringDiscard = hovering
