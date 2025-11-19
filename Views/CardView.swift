@@ -26,7 +26,7 @@ struct CardView: View {
 
     var body: some View {
         ZStack { cardFace }
-            .frame(width: 84, height: 132)
+            .frame(width: 80, height: 126)
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
             .shadow(radius: 2)
 
