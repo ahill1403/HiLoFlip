@@ -32,7 +32,7 @@ struct GameView: View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 if let top = vm.players.first {
                     grid(for: top, isTop: true)
                 }
@@ -45,12 +45,12 @@ struct GameView: View {
                     grid(for: vm.players[1], isTop: false)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.horizontal, 12)
-            .padding(.top, 24)
-            .padding(.bottom, 36)
-            .safeAreaInset(edge: .top) { Color.clear.frame(height: 12) }
-            .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 18) }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .padding(.horizontal, 10)
+            .padding(.top, 32)
+            .padding(.bottom, 32)
+            .safeAreaPadding(.top, 8)
+            .safeAreaPadding(.bottom, 12)
 
             if showSpotlight {
                 Rectangle()
