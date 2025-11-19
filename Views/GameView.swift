@@ -37,9 +37,7 @@ struct GameView: View {
                     grid(for: top, isTop: true)
                 }
 
-                Spacer(minLength: 12)
                 centerArea
-                Spacer(minLength: 12)
 
                 if vm.players.count > 1 {
                     grid(for: vm.players[1], isTop: false)
