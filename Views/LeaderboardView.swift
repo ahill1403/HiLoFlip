@@ -1,3 +1,9 @@
+//
+//  Leaderboard.swift
+//  HiLoFlip
+//
+//  Created by Aaron Hill on 11/18/25.
+
 import SwiftUI
 import Observation
 

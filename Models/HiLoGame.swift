@@ -9,7 +9,7 @@ import Foundation
 import UniformTypeIdentifiers
 import SwiftUI
 
-struct HiLoGame {
+struct HiLoGame: Codable {
     struct Card: Identifiable, Hashable, Codable {
         let id: UUID
         let value: Int
@@ -33,9 +33,9 @@ struct HiLoGame {
 
     struct Player: Identifiable, Hashable, Codable {
         let id: UUID
-        private(set) var name: String
-        private(set) var hand: [Card]
-        private(set) var score: Int
+        fileprivate(set) var name: String
+        fileprivate(set) var hand: [Card]
+        fileprivate(set) var score: Int
 
         init(name: String, id: UUID = UUID()) {
             self.id = id
@@ -122,3 +122,4 @@ extension HiLoGame.Card: Transferable {
         CodableRepresentation(contentType: .json)
     }
 }
+
