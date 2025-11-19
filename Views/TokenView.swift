@@ -13,12 +13,12 @@ struct TokenView: View {
     var body: some View {
         ZStack {
             Circle().fill(.black)
-            Circle().inset(by: 10).stroke(.white, lineWidth: 2)
+            Circle().inset(by: 9.5).stroke(.white, lineWidth: 2)
             Text(isHi ? "HI" : "LO")
-                .font(.system(size: 52, weight: .heavy, design: .rounded))
+                .font(.system(size: 49, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
         }
-        .frame(width: 150, height: 150)
+        .frame(width: 142, height: 142)
         .accessibilityLabel(isHi ? "High token" : "Low token")
     }
 }

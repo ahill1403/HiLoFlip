@@ -26,13 +26,13 @@ struct GameView: View {
     @State private var tokenSpinTick = 0
     @State private var showSpotlight = false
 
-    private let columns = [GridItem(.adaptive(minimum: 80, maximum: 110), spacing: 8)]
+    private let columns = [GridItem(.adaptive(minimum: 76, maximum: 104), spacing: 7)]
 
     var body: some View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            VStack(spacing: 16) {
+            VStack(spacing: 14) {
                 if let top = vm.players.first {
                     grid(for: top, isTop: true)
                 }
@@ -44,11 +44,11 @@ struct GameView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .padding(.horizontal, 10)
-            .padding(.top, 16)
-            .padding(.bottom, 36)
-            .safeAreaPadding(.top, 10)
-            .safeAreaPadding(.bottom, 14)
+            .padding(.horizontal, 9)
+            .padding(.top, 14)
+            .padding(.bottom, 32)
+            .safeAreaPadding(.top, 8)
+            .safeAreaPadding(.bottom, 12)
 
             if showSpotlight {
                 Rectangle()
@@ -57,12 +57,12 @@ struct GameView: View {
                     .transition(.opacity)
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Quit") { showQuitConfirm = true }
-            }
+        .toolbar(.hidden, for: .navigationBar)
+        .overlay(alignment: .topTrailing) {
+            quitControls
+                .padding(.top, 4)
+                .padding(.trailing, 6)
         }
-        .toolbarBackground(.hidden, for: .navigationBar)
         .confirmationDialog("Quit the game?", isPresented: $showQuitConfirm, titleVisibility: .visible) {
             Button("Quit", role: .destructive) { dismiss() }
             Button("Cancel", role: .cancel) { }
@@ -79,8 +79,29 @@ struct GameView: View {
         }
     }
 
+    private var quitControls: some View {
+        HStack {
+            Button {
+                showQuitConfirm = true
+            } label: {
+                Label("Quit", systemImage: "xmark.circle.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .labelStyle(.titleAndIcon)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
+            .tint(.white)
+        }
+    }
+
     private var centerArea: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 11) {
 
             PhaseAnimator(
                 [0, 1, 0],
@@ -116,16 +137,17 @@ struct GameView: View {
                 }
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 4)
+        .padding(.top, 2)
     }
 
     private func grid(for player: HiLoGame.Player, isTop: Bool) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            HStack(spacing: 10) {
                 Text(playerNameLine(player, isTop: isTop))
                     .font(.headline)
                     .foregroundStyle(.white.opacity(0.9))
-                Spacer()
+                    .frame(maxWidth: .infinity, alignment: isTop ? .center : .leading)
+                    .multilineTextAlignment(.center)
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Score")
                         .font(.caption)
@@ -135,9 +157,8 @@ struct GameView: View {
                         .foregroundStyle(.white)
                 }
             }
-            .padding(.trailing, isTop ? 72 : 0)
 
-            LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
+            LazyVGrid(columns: columns, alignment: .center, spacing: 7) {
                 ForEach(Array(vm.hand(for: player).enumerated()), id: \.element.id) { idx, card in
                     CardView(card: card)
                         .modifier(DealIn(index: idx))
@@ -218,7 +239,7 @@ struct DiscardPileView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .strokeBorder(.white.opacity(0.5), style: StrokeStyle(lineWidth: 2, dash: [6, 6]))
-                .frame(width: 102, height: 142)
+                .frame(width: 97, height: 135)
             if let top = top {
                 CardView(card: top, forceFaceUp: true)
                     .matchedGeometryEffect(id: top.id, in: namespace)
@@ -240,7 +261,7 @@ struct DeckView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.black)
-                .frame(width: 102, height: 142)
+                .frame(width: 97, height: 135)
             Text("Deck\n\(count)")
                 .multilineTextAlignment(.center)
                 .font(.headline)

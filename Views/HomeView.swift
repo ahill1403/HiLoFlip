@@ -17,7 +17,10 @@ struct HomeView: View {
                 Text("HiLoFlip").font(.largeTitle).bold()
                 Text("A quick game of higher or lower").foregroundStyle(.secondary)
 
-                Button("New Game") { startNewGame = true }
+                Button("New Game") {
+                    gameVM.resetGame()
+                    startNewGame = true
+                }
                 .buttonStyle(.borderedProminent)
 
                 NavigationLink("Settings") {

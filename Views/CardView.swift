@@ -15,19 +15,19 @@ struct CardView: View {
 
     private var isUp: Bool { forceFaceUp ?? card.isFaceUp }
 
-    private let cornerNumberSize: CGFloat = 20
+    private let cornerNumberSize: CGFloat = 19
     private let cornerSymbolScale: CGFloat = 0.7
     private let cornerStackSpacing: CGFloat = 2
-    private let cornerPadding: CGFloat = 4
+    private let cornerPadding: CGFloat = 3.6
 
-    private let badgeSize: CGFloat = 50
-    private let badgeInset: CGFloat = 10
-    private let badgeLine: CGFloat = 2
+    private let badgeSize: CGFloat = 48
+    private let badgeInset: CGFloat = 9.5
+    private let badgeLine: CGFloat = 1.9
 
     var body: some View {
         ZStack { cardFace }
-            .frame(width: 80, height: 126)
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .frame(width: 76, height: 120)
+            .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
             .shadow(radius: 2)
 
             .rotation3DEffect(.degrees(isUp ? 0 : 180), axis: (x: 0, y: 1, z: 0))
@@ -88,9 +88,9 @@ struct CardView: View {
 
     private var centerNumberChip: some View {
         ZStack {
-            Circle().fill(Color.black).frame(width: 54, height: 54)
+            Circle().fill(Color.black).frame(width: 51, height: 51)
             Text("\(card.value)")
-                .font(.system(size: 26, weight: .heavy, design: .rounded))
+                .font(.system(size: 25, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
                 .minimumScaleFactor(0.4)
         }
@@ -163,7 +163,7 @@ private struct CornerBadge: View {
                 .fill(Color.black)
                 .scaleEffect(symbolScale)
         }
-        .frame(width: 18, height: 18)
+        .frame(width: 17, height: 17)
         .accessibilityHidden(true)
     }
 }
