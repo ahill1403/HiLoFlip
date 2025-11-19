@@ -89,6 +89,8 @@ struct HiLoGame: Codable {
         return deck.removeFirst()
     }
 
+    mutating func flipToken() { isTokenHi.toggle() }
+
     mutating func removeCardFromPlayerHand(playerID: UUID, cardID: UUID) -> Card? {
         guard let pIndex = players.firstIndex(where: { $0.id == playerID }) else { return nil }
         guard let cIndex = players[pIndex].hand.firstIndex(where: { $0.id == cardID }) else { return nil }
