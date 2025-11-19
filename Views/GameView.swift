@@ -26,28 +26,26 @@ struct GameView: View {
     @State private var tokenSpinTick = 0
     @State private var showSpotlight = false
 
-    private let columns = [GridItem(.adaptive(minimum: 86, maximum: 120), spacing: 10)]
+    private let columns = [GridItem(.adaptive(minimum: 80, maximum: 110), spacing: 8)]
 
     var body: some View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 18) {
-                    if let top = vm.players.first {
-                        grid(for: top, isTop: true)
-                    }
-
-                    centerArea
-
-                    if vm.players.count > 1 {
-                        grid(for: vm.players[1], isTop: false)
-                    }
+            VStack(spacing: 14) {
+                if let top = vm.players.first {
+                    grid(for: top, isTop: true)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .safeAreaPadding(.horizontal, 12)
-                .safeAreaPadding(.vertical, 14)
+
+                centerArea
+
+                if vm.players.count > 1 {
+                    grid(for: vm.players[1], isTop: false)
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 10)
 
             if showSpotlight {
                 Rectangle()
@@ -78,7 +76,7 @@ struct GameView: View {
     }
 
     private var centerArea: some View {
-        HStack(spacing: 18) {
+        HStack(spacing: 12) {
 
             PhaseAnimator(
                 [0, 1, 0],
@@ -215,7 +213,7 @@ struct DiscardPileView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .strokeBorder(.white.opacity(0.5), style: StrokeStyle(lineWidth: 2, dash: [6, 6]))
-                .frame(width: 110, height: 150)
+                .frame(width: 102, height: 142)
             if let top = top {
                 CardView(card: top, forceFaceUp: true)
                     .matchedGeometryEffect(id: top.id, in: namespace)
@@ -237,7 +235,7 @@ struct DeckView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.black)
-                .frame(width: 110, height: 150)
+                .frame(width: 102, height: 142)
             Text("Deck\n\(count)")
                 .multilineTextAlignment(.center)
                 .font(.headline)
