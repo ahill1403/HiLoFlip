@@ -53,6 +53,7 @@ final class HiLoFlipCardGame {
         self.soundsEnabled = defaults.object(forKey: Constants.soundEnabledKey) as? Bool ?? true
         self.game = HiLoGame(playerNames: playerNames)
         self.game.dealCards()
+        randomizeToken()
         revealCurrentPlayerHand()
         persistState()
     }
@@ -82,6 +83,7 @@ final class HiLoFlipCardGame {
         mustPlaySecondPending = false
         currentPlayerIndex = 0
         game.resetGame()
+        randomizeToken()
         revealCurrentPlayerHand()
         persistState()
     }
@@ -96,6 +98,7 @@ final class HiLoFlipCardGame {
         mustPlaySecondPending = false
         currentPlayerIndex = 0
         game.dealCards()
+        randomizeToken()
         revealCurrentPlayerHand()
         persistState()
     }
@@ -143,7 +146,7 @@ final class HiLoFlipCardGame {
 
         guard let removed = game.removeCardFromPlayerHand(playerID: player.id, cardID: card.id) else { return }
         game.pushToDiscard(removed)
-        game.flipToken()
+        randomizeToken()
 
         Task {
             if soundsEnabled {
@@ -170,7 +173,31 @@ final class HiLoFlipCardGame {
             advanceTurn(skippingNext: didSkip)
         }
     }
-    
+
+    @discardableResult
+    func drawCardForCurrentPlayer() -> HiLoGame.Card? {
+        guard let drawn = game.drawCard(for: currentPlayer.id) else {
+            if deckCount == 0 && !mustPlaySecondPending {
+                randomizeToken()
+                advanceTurn(skippingNext: false)
+            } else {
+                lastDropInvalidTick += 1
+                Task { await SoundManager.shared.play(.invalidMove) }
+            }
+            return nil
+        }
+        revealCurrentPlayerHand()
+        persistState()
+
+        if canPlay(drawn) {
+            play(card: drawn, from: currentPlayer)
+        } else if !mustPlaySecondPending {
+            randomizeToken()
+            advanceTurn(skippingNext: false)
+        }
+        return drawn
+    }
+
     // MARK: - Turn
     
     private func advanceTurn(skippingNext: Bool) {
@@ -216,6 +243,10 @@ final class HiLoFlipCardGame {
         let defaults = UserDefaults.standard
         guard let data = defaults.data(forKey: Constants.gameStateKey) else { return nil }
         return try? JSONDecoder().decode(PersistedState.self, from: data)
+    }
+
+    private func randomizeToken() {
+        game.setToken(isHi: Bool.random())
     }
     
     private func soundType(for card: HiLoGame.Card) -> SoundEffect {
