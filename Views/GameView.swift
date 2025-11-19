@@ -45,7 +45,7 @@ struct GameView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .padding(.horizontal, 10)
-            .padding(.top, 32)
+            .padding(.top, 12)
             .padding(.bottom, 36)
             .safeAreaPadding(.top, 8)
             .safeAreaPadding(.bottom, 16)
@@ -62,9 +62,7 @@ struct GameView: View {
                 Button("Quit") { showQuitConfirm = true }
             }
         }
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarBackground(tableGreen, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbarBackground(.hidden, for: .navigationBar)
         .confirmationDialog("Quit the game?", isPresented: $showQuitConfirm, titleVisibility: .visible) {
             Button("Quit", role: .destructive) { dismiss() }
             Button("Cancel", role: .cancel) { }
@@ -137,6 +135,7 @@ struct GameView: View {
                         .foregroundStyle(.white)
                 }
             }
+            .padding(.trailing, isTop ? 72 : 0)
 
             LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
                 ForEach(Array(vm.hand(for: player).enumerated()), id: \.element.id) { idx, card in
