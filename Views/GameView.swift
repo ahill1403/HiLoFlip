@@ -58,13 +58,8 @@ struct GameView: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
-        .overlay(alignment: .topTrailing) {
-            quitControls
-                .padding(.top, 4)
-                .padding(.trailing, 6)
-        }
-        .confirmationDialog("Quit the game?", isPresented: $showQuitConfirm, titleVisibility: .visible) {
-            Button("Quit", role: .destructive) { dismiss() }
+        .confirmationDialog("End the game?", isPresented: $showQuitConfirm, titleVisibility: .visible) {
+            Button("End Game", role: .destructive) { dismiss() }
             Button("Cancel", role: .cancel) { }
         }
         .navigationBarBackButtonHidden(true)
@@ -80,24 +75,22 @@ struct GameView: View {
     }
 
     private var quitControls: some View {
-        HStack {
-            Button {
-                showQuitConfirm = true
-            } label: {
-                Label("Quit", systemImage: "xmark.circle.fill")
-                    .font(.subheadline.weight(.semibold))
-                    .labelStyle(.titleAndIcon)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.white.opacity(0.35), lineWidth: 1)
-                    )
-            }
-            .buttonStyle(.plain)
-            .tint(.white)
+        Button {
+            showQuitConfirm = true
+        } label: {
+            Label("End Game", systemImage: "xmark.circle.fill")
+                .font(.subheadline.weight(.semibold))
+                .labelStyle(.titleAndIcon)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(.ultraThinMaterial, in: Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                )
         }
+        .buttonStyle(.plain)
+        .tint(.white)
     }
 
     private var centerArea: some View {
@@ -140,22 +133,32 @@ struct GameView: View {
         .padding(.top, 2)
     }
 
+    private func scoreView(for player: HiLoGame.Player) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text("Score")
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.7))
+            Text("\(player.score)")
+                .font(.title3.bold())
+                .foregroundStyle(.white)
+        }
+        .frame(alignment: .trailing)
+    }
+
     private func grid(for player: HiLoGame.Player, isTop: Bool) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
                 Text(playerNameLine(player, isTop: isTop))
                     .font(.headline)
                     .foregroundStyle(.white.opacity(0.9))
-                    .frame(maxWidth: .infinity, alignment: isTop ? .center : .leading)
-                    .multilineTextAlignment(.center)
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Score")
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.7))
-                    Text("\(player.score)")
-                        .font(.title3.bold())
-                        .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+
+                if isTop {
+                    quitControls
                 }
+
+                scoreView(for: player)
             }
 
             LazyVGrid(columns: columns, alignment: .center, spacing: 7) {
