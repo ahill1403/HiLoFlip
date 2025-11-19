@@ -140,10 +140,11 @@ final class HiLoFlipCardGame {
             Task { await SoundManager.shared.play(.invalidMove) }
             return
         }
-        
+
         guard let removed = game.removeCardFromPlayerHand(playerID: player.id, cardID: card.id) else { return }
         game.pushToDiscard(removed)
-        
+        game.flipToken()
+
         Task {
             if soundsEnabled {
                 await SoundManager.shared.play(soundType(for: removed))
@@ -152,16 +153,17 @@ final class HiLoFlipCardGame {
         
         var didSkip = false
         if removed.isSkipCard { didSkip = true }
-        
+
         if removed.isMustPlaySecondCard {
             if mustPlaySecondPending {
                 mustPlaySecondPending = false
             } else {
                 mustPlaySecondPending = true
+                persistState()
                 return
             }
         }
-        
+
         if game.players[currentPlayerIndex].hand.isEmpty {
             completeRound(winner: currentPlayer)
         } else {
