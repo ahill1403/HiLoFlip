@@ -113,9 +113,20 @@ struct GameView: View {
 
     private func grid(for player: HiLoGame.Player, isTop: Bool) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(playerNameLine(player, isTop: isTop))
-                .font(.headline)
-                .foregroundStyle(.white.opacity(0.9))
+            HStack {
+                Text(playerNameLine(player, isTop: isTop))
+                    .font(.headline)
+                    .foregroundStyle(.white.opacity(0.9))
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Score")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.7))
+                    Text("\(player.score)")
+                        .font(.title3.bold())
+                        .foregroundStyle(.white)
+                }
+            }
 
             LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
                 ForEach(Array(vm.hand(for: player).enumerated()), id: \.element.id) { idx, card in

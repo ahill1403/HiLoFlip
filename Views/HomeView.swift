@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var settingsVM = HiLoFlipCardGame(playerNames: ["Player 1", "Player 2"])
+    @State private var gameVM = HiLoFlipCardGame.loadSavedOrNew()
     @State private var startNewGame = false
-    @State private var gameVM: HiLoFlipCardGame? = nil
 
     var body: some View {
         NavigationStack {
@@ -18,14 +17,15 @@ struct HomeView: View {
                 Text("HiLoFlip").font(.largeTitle).bold()
                 Text("A quick game of higher or lower").foregroundStyle(.secondary)
 
-                Button("New Game") {
-                    gameVM = HiLoFlipCardGame(playerNames: settingsVM.playerNames)
-                    startNewGame = true
-                }
+                Button("New Game") { startNewGame = true }
                 .buttonStyle(.borderedProminent)
 
                 NavigationLink("Settings") {
-                    SettingsView(vm: settingsVM)
+                    SettingsView(vm: gameVM)
+                }
+
+                NavigationLink("Leaderboard") {
+                    LeaderboardView(store: LeaderboardStore.shared)
                 }
 
                 NavigationLink("Instructions") {
@@ -36,9 +36,7 @@ struct HomeView: View {
             }
             .padding()
             .navigationDestination(isPresented: $startNewGame) {
-                if let vm = gameVM {
-                    GameView(vm: vm)
-                }
+                GameView(vm: gameVM)
             }
         }
     }
