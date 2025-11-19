@@ -45,10 +45,10 @@ struct GameView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .padding(.horizontal, 10)
-            .padding(.top, 12)
+            .padding(.top, 16)
             .padding(.bottom, 36)
-            .safeAreaPadding(.top, 8)
-            .safeAreaPadding(.bottom, 16)
+            .safeAreaPadding(.top, 10)
+            .safeAreaPadding(.bottom, 14)
 
             if showSpotlight {
                 Rectangle()
