@@ -32,7 +32,7 @@ struct GameView: View {
         ZStack {
             tableGreen.ignoresSafeArea()
 
-            VStack(spacing: 14) {
+            VStack(spacing: 16) {
                 if let top = vm.players.first {
                     grid(for: top, isTop: true)
                 }
@@ -45,8 +45,10 @@ struct GameView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .padding(.horizontal, 10)
-            .padding(.top, 24)
-            .padding(.bottom, 18)
+            .padding(.top, 48)
+            .padding(.bottom, 52)
+            .safeAreaPadding(.top, 18)
+            .safeAreaPadding(.bottom, 20)
 
             if showSpotlight {
                 Rectangle()
@@ -60,6 +62,9 @@ struct GameView: View {
                 Button("Quit") { showQuitConfirm = true }
             }
         }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(tableGreen, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .confirmationDialog("Quit the game?", isPresented: $showQuitConfirm, titleVisibility: .visible) {
             Button("Quit", role: .destructive) { dismiss() }
             Button("Cancel", role: .cancel) { }
